@@ -1,0 +1,28 @@
+.container {
+    height: 100%;
+    width: 100%;
+    padding: 1rem;
+}
+.panel-title {
+    text-align: center;
+}
+
+.panel-title1 {
+    text-align: center;
+    padding-top: 1rem;
+}
+.panel-body {
+    width: 77%;
+    padding: 2rem;
+    margin: auto;
+    border: 3px solid #666;
+}
+.panel-body1 {
+    width: 77%;
+    padding: 2rem;
+    margin: auto;
+    border: 3px solid #666;
+}
+
+
+

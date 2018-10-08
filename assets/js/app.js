@@ -1,77 +1,85 @@
 $(document).ready(function() {
   
-  var database = firebase.database();
-  //First Time - Push Back 1 Year to Ensure It Comes Before Current Time
-  $("#add-train-btn").on("click", function (){
+    var database = firebase.database();
+  // First Time - Always pushed back to 1 to ensure it works for the current time
+   
+  // Button to Add Trains
+  $("#add-train-btn").on("click", function(event) {
+    event.preventDefault();
 
-    //Grabs User Input
+    // Grabs user input
     var trainName = $("#train-name-input").val().trim();
     var trainDest = $("#dest-input").val().trim();
-    var firstTrain = $("#first-train-input").val().trim();
+    var firstTrain = $("#firstTrain-input").val().trim();
     var trainFreq = $("#freq-input").val().trim();
 
-    //Create Local Temporary Object to Hold Train Data
+    // Create Local Temp Object to hold train info
     var newTrain = {
         name: trainName,
         destination: trainDest,
         start: firstTrain,
-        frequency: trainFreq,
-    }
+        frequency: trainFreq
+    };
 
-    //Uploads Train Data
+    // Upload Train Data to Database
         database.ref().push(newTrain);
-    //Allert
-        alert("Train Successfully Added");
 
-    //Clears All of the Boxes
-        $("#train-name-input").val("");
-        $("#dest-input").val("");
-        $("#firstTrain-input").val("");
-        $("#freq-input").val("");
-  });
-    //Create Firebase Event For Adding a Train Into the Database and a Row in the HTML When a User Adds an Entry
+
+    //Alert - When Train Added
+        alert("Train Successfully Added!");
+
+    // Clears All Text Boxes
+    $("#train-name-input").val("");
+    $("#dest-input").val("");
+    $("#firstTrain-input").val("");
+    $("#freq-input").val("");
+    });
+
+    // Create FFirebase Event for Adding Trains into Database
     database.ref().on("child_added", function(childSnapshot, prevChildKey) {
 
-        console.log(childSnapshot.val());
+    console.log(childSnapshot.val());
 
-        //Store Everything Into a Variable
-        var trainName = childSnapshot.val().name;
-        var trainDest = childSnapshot.val().destination;
-        var firstTrain = childSnapshot.val().start;
-        var trainFreq = childSnapshot.val().frequency;
+    // Store everything into a variable
+    var trainName = childSnapshot.val().name;
+    var trainDest = childSnapshot.val().destination;
+    var firstTrain = childSnapshot.val().start;
+    var trainFreq = childSnapshot.val().frequency;
 
-        //Declare Variable
-        var trainFreq;
 
-        //Time is to Be Entered on the Entry Form
+    // Declare variable
+    var trainFreq;
+
+        // Time is to be entered on the entry form
         var firstTime = 0;
-        
-        var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
-            console.log(firstTimeConverted);
 
-        //Current Time
-        var currentTime = moment();
-        console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
+    var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
+    console.log(firstTimeConverted);
 
-        //Differnce Between Times 
-        var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-        console.log("DIFFERENCE IN TIME: " + diffTime);
+    // Current Time
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
 
-        //Time Apart
-        var tRemainder = diffTime % trainFreq;
-        console.log(tRemainder);
+    // Difference between the times
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
 
-        //Minutes Until Train
-        var tMinutesTillTrain = trainFreq - tRemainder;
-        console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+    // Time apart (remainder)
+    var tRemainder = diffTime % trainFreq;
+    console.log(tRemainder);
 
-        //Next Train
-        var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-        console.log("ARRIVAL TIME: " + moment(nextTrain).format("HH:mm"));
+    // Minute Until Train
+    var tMinutesTillTrain = trainFreq - tRemainder;
+    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
 
-        //Add Each Trains Data Into the Table
-        $("#train-table > tbody").append("<tr><td>" + trainName + "<tr><td>" + trainDest + "<tr><td>" + trainFreq + "<tr><td>" + moment(nextTrain).format("HH:mm") + "<tr><td>" + tMinutesTillTrain + "<tr><td>");
+    // Next Train
+    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    console.log("ARRIVAL TIME: " + moment(nextTrain).format("HH:mm"));
 
+
+    // Add each train's data into the table
+    $("#train-table > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDest + "</td><td>" + trainFreq + 
+     "</td><td>" + moment(nextTrain).format("HH:mm") + "</td><td>" + tMinutesTillTrain + "</td></tr>");
     });
 
 });
