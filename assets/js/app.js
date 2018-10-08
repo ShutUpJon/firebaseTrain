@@ -1,17 +1,6 @@
 $(document).ready(function() {
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyAjWAXX1BD5AIOqBax_BqHWVlIAewD3lkc",
-    authDomain: "trainscheduler-ce73e.firebaseapp.com",
-    databaseURL: "https://trainscheduler-ce73e.firebaseio.com",
-    projectId: "trainscheduler-ce73e",
-    storageBucket: "trainscheduler-ce73e.appspot.com",
-    messagingSenderId: "454694222291"
-  };
-  firebase.initializeApp(config);
   
   var database = firebase.database();
-  
   //First Time - Push Back 1 Year to Ensure It Comes Before Current Time
   $("#add-train-btn").on("click", function (){
 
@@ -57,7 +46,7 @@ $(document).ready(function() {
         //Time is to Be Entered on the Entry Form
         var firstTime = 0;
         
-        var firstTimeConverted = moment(irstTime, "HH:mm").subtract(1, "years");
+        var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
             console.log(firstTimeConverted);
 
         //Current Time
